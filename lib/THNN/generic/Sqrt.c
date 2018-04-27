@@ -8,7 +8,6 @@ void THNN_(Sqrt_updateOutput)(
           THTensor *output,
           accreal eps_)
 {
-  real eps = TH_CONVERT_ACCREAL_TO_REAL(eps_);
   THTensor_(resizeAs)(output, input);
   THTensor_(sqrt)(output, input);
 }
@@ -37,7 +36,7 @@ void THNN_(Sqrt_updateGradInput)(
     real *gradOutput_data = THTensor_(data)(gradOutput);
     real *gradInput_data  = THTensor_(data)(gradInput);
     real *output_data     = THTensor_(data)(output);
-    long i;
+    int64_t i;
 #pragma omp parallel for private(i)
     for(i = 0; i < THTensor_(nElement)(output); i++)
     {

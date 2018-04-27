@@ -15,11 +15,11 @@ local base_declarations = [[
 typedef void THNNState;
 
 typedef struct {
-  unsigned long the_initial_seed;
+  uint64_t the_initial_seed;
   int left;
   int seeded;
-  unsigned long next;
-  unsigned long state[624]; /* the array for the state vector 624 = _MERSENNE_STATE_N  */
+  uint64_t next;
+  uint64_t state[624]; /* the array for the state vector 624 = _MERSENNE_STATE_N  */
   double normal_x;
   double normal_y;
   double normal_rho;
@@ -59,8 +59,8 @@ local replacements =
       ['THTensor'] = 'THDoubleTensor',
       ['THIndexTensor'] = 'THLongTensor',
       ['THIntegerTensor'] = 'THIntTensor',
-      ['THIndex_t'] = 'long',
-      ['THInteger_t'] = 'int'
+      ['THIndex_t'] = 'int64_t',
+      ['THInteger_t'] = 'int32_t'
    },
    {
       ['TYPE'] = 'Float',
@@ -68,8 +68,8 @@ local replacements =
       ['THTensor'] = 'THFloatTensor',
       ['THIndexTensor'] = 'THLongTensor',
       ['THIntegerTensor'] = 'THIntTensor',
-      ['THIndex_t'] = 'long',
-      ['THInteger_t'] = 'int'
+      ['THIndex_t'] = 'int64_t',
+      ['THInteger_t'] = 'int32_t'
     }
 }
 

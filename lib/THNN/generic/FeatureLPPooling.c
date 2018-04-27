@@ -5,25 +5,33 @@
 #ifndef FEATURE_LP_DEFS
 #define FEATURE_LP_DEFS
 
+#ifdef _MSC_VER
+  #define FEATURE_LP_SIZE_TYPE int64_t
+  #define FEATURE_LP_CAST_TYPE (int64_t)
+#else
+  #define FEATURE_LP_SIZE_TYPE size_t
+  #define FEATURE_LP_CAST_TYPE
+#endif
+
 typedef struct {
   size_t size[4];
   size_t stride[4];
 } FeatureLPPoolingSizes;
 
 static inline size_t flpGetOffset(FeatureLPPoolingSizes* s,
-                           size_t batch,
-                           size_t feature,
-                           size_t opt1,
-                           size_t opt2) {
+                           FEATURE_LP_SIZE_TYPE batch,
+                           FEATURE_LP_SIZE_TYPE feature,
+                           FEATURE_LP_SIZE_TYPE opt1,
+                           FEATURE_LP_SIZE_TYPE opt2) {
   return s->stride[0] * batch +
     s->stride[1] * feature +
     s->stride[2] * opt1 +
     s->stride[3] * opt2;
 }
 
-static inline size_t flpOutputSize(size_t inputSize,
-                            size_t width,
-                            size_t stride) {
+static inline size_t flpOutputSize(FEATURE_LP_SIZE_TYPE inputSize,
+                            FEATURE_LP_SIZE_TYPE width,
+                            FEATURE_LP_SIZE_TYPE stride) {
   return ((inputSize - width) / stride) + 1;
 }
 
@@ -94,7 +102,7 @@ THNN_(FeatureLPPooling_resizeForOutputCPU)(THTensor* toResize,
   int inputDim = THTensor_(nDimension)(input);
   THAssert(inputDim >= 1 && inputDim <= 4);
 
-  long outSize =
+  int64_t outSize =
     flpOutputSize(THTensor_(size)(input, 0), width, stride);
   if (batchMode) {
     THAssert(inputDim > 1);
@@ -210,17 +218,19 @@ THNN_(FeatureLPPooling_updateOutput)(
   real* inputP = THTensor_(data)(input);
   real* outputP = THTensor_(data)(output);
 
+  FEATURE_LP_SIZE_TYPE batch, opt1, opt2, outputFeature, i;
+
 #pragma omp parallel for
-  for (size_t batch = 0; batch < inputDesc.size[0]; ++batch) {
-    for (size_t opt1 = 0; opt1 < inputDesc.size[2]; ++opt1) {
-      for (size_t opt2 = 0; opt2 < inputDesc.size[3]; ++opt2) {
-        for (size_t outputFeature = 0;
-             outputFeature < outputDesc.size[1]; ++outputFeature) {
+  for (batch = 0; batch < FEATURE_LP_CAST_TYPE inputDesc.size[0]; ++batch) {
+    for (opt1 = 0; opt1 < FEATURE_LP_CAST_TYPE inputDesc.size[2]; ++opt1) {
+      for (opt2 = 0; opt2 < FEATURE_LP_CAST_TYPE inputDesc.size[3]; ++opt2) {
+        for (outputFeature = 0;
+             outputFeature < FEATURE_LP_CAST_TYPE outputDesc.size[1]; ++outputFeature) {
 
           accreal v = (accreal) 0;
-          for (size_t i = 0; i < width; ++i) {
-            size_t inputFeature = outputFeature * stride + i;
-            if (inputFeature >= inputDesc.size[1]) {
+          for (i = 0; i < (FEATURE_LP_SIZE_TYPE) width; ++i) {
+            FEATURE_LP_SIZE_TYPE inputFeature = outputFeature * stride + i;
+            if (inputFeature >= FEATURE_LP_CAST_TYPE inputDesc.size[1]) {
               break;
             }
 
@@ -269,7 +279,7 @@ THNN_(FeatureLPPooling_updateGradInput)(
     THNN_(FeatureLPPooling_upcastCPU)(output, batchMode);
 
   // Make sure the feature dimension is properly sized
-  THArgCheck(inputDesc.size[1] >= width, 3,
+  THArgCheck(inputDesc.size[1] >= (FEATURE_LP_SIZE_TYPE) width, 3,
              "input: feature dimension must be >= width");
 
   // Make sure that width and stride are within range
@@ -285,7 +295,7 @@ THNN_(FeatureLPPooling_updateGradInput)(
   }
 
   // Make sure that the input sizes produce the output sizes
-  THArgCheck(flpOutputSize(inputDesc.size[1], width, stride) ==
+  THArgCheck(flpOutputSize(FEATURE_LP_CAST_TYPE inputDesc.size[1], width, stride) ==
              outputDesc.size[1], 3,
              "input and output sizes do not match with respect to "
              "width and stride");
@@ -304,12 +314,14 @@ THNN_(FeatureLPPooling_updateGradInput)(
   real* outputP = THTensor_(data)(output);
   real* inputP = THTensor_(data)(input);
 
+  FEATURE_LP_SIZE_TYPE batch, opt1, opt2, outputFeature, i;
+
 #pragma omp parallel for
-  for (size_t batch = 0; batch < inputDesc.size[0]; ++batch) {
-    for (size_t opt1 = 0; opt1 < inputDesc.size[2]; ++opt1) {
-      for (size_t opt2 = 0; opt2 < inputDesc.size[3]; ++opt2) {
-        for (size_t outputFeature = 0;
-             outputFeature < outputDesc.size[1]; ++outputFeature) {
+  for (batch = 0; batch < FEATURE_LP_CAST_TYPE inputDesc.size[0]; ++batch) {
+    for (opt1 = 0; opt1 < FEATURE_LP_CAST_TYPE inputDesc.size[2]; ++opt1) {
+      for (opt2 = 0; opt2 < FEATURE_LP_CAST_TYPE inputDesc.size[3]; ++opt2) {
+        for (outputFeature = 0;
+             outputFeature < FEATURE_LP_CAST_TYPE outputDesc.size[1]; ++outputFeature) {
 
           // Load output (f(x_is)). It is possible that this is zero, in
           // which case we'll ignore this point.
@@ -321,8 +333,8 @@ THNN_(FeatureLPPooling_updateGradInput)(
             continue;
           }
 
-          for (size_t i = 0; i < width; ++i) {
-            size_t inputFeature = outputFeature * stride + i;
+          for (i = 0; i < (FEATURE_LP_SIZE_TYPE) width; ++i) {
+            FEATURE_LP_SIZE_TYPE inputFeature = outputFeature * stride + i;
             THAssert(inputFeature < inputDesc.size[1]);
 
             real gradOutputV =

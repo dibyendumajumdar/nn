@@ -17,13 +17,13 @@ static inline void THNN_(VolumetricDilatedMaxPooling_shapeCheck)(
   int dimt = 1;
   int dimh = 2;
   int dimw = 3;
-  long nslices;
-  long itime;
-  long iheight;
-  long iwidth;
-  long otime;
-  long oheight;
-  long owidth;
+  int64_t nslices;
+  int64_t itime;
+  int64_t iheight;
+  int64_t iwidth;
+  int64_t otime;
+  int64_t oheight;
+  int64_t owidth;
 
   THArgCheck(kT > 0 && kW > 0 && kH > 0, 5,
              "kernel size should be greater than zero, but got kT: %d kH: %d kW: %d",
@@ -101,13 +101,13 @@ static void THNN_(VolumetricDilatedMaxPooling_updateOutput_frame)(
           real *input_p,
           real *output_p,
           THIndex_t *indz_p,
-          long nslices,
-          long itime,
-          long iwidth,
-          long iheight,
-          long otime,
-          long owidth,
-          long oheight,
+          int64_t nslices,
+          int64_t itime,
+          int64_t iwidth,
+          int64_t iheight,
+          int64_t otime,
+          int64_t owidth,
+          int64_t oheight,
           int kT,
           int kW,
           int kH,
@@ -121,12 +121,13 @@ static void THNN_(VolumetricDilatedMaxPooling_updateOutput_frame)(
           int dilationW,
           int dilationH)
 {
-  long k;
+  int64_t k;
 #pragma omp parallel for private(k)
   for (k = 0; k < nslices; k++)
   {
     /* loop over output */
-    long i, j, ti;
+    int64_t i, j, ti;
+    real *ip = input_p + k * itime * iwidth * iheight;
     for (ti = 0; ti < otime; ti++)
     {
       for (i = 0; i < oheight; i++)
@@ -135,13 +136,13 @@ static void THNN_(VolumetricDilatedMaxPooling_updateOutput_frame)(
         {
           /* local pointers */
 
-          long start_t = ti * dT - pT;
-          long start_h = i * dH - pH;
-          long start_w = j * dW - pW;
+          int64_t start_t = ti * dT - pT;
+          int64_t start_h = i * dH - pH;
+          int64_t start_w = j * dW - pW;
 
-          long kernel_t = fminf(kT, kT + start_t);
-          long kernel_h = fminf(kH, kH + start_h);
-          long kernel_w = fminf(kW, kW + start_w);
+          int64_t end_t = fminf(start_t + (kT - 1) * dilationT + 1, itime);
+          int64_t end_h = fminf(start_h + (kH - 1) * dilationH + 1, iheight);
+          int64_t end_w = fminf(start_w + (kW - 1) * dilationW + 1, iwidth);
 
           while(start_t < 0)
             start_t += dilationT;
@@ -150,46 +151,36 @@ static void THNN_(VolumetricDilatedMaxPooling_updateOutput_frame)(
           while(start_w < 0)
             start_w += dilationW;
 
-          real *ip = input_p + k * itime * iwidth * iheight
-            + start_t * iwidth * iheight + start_h * iwidth + start_w;
           real *op = output_p + k * otime * owidth * oheight
             + ti * owidth * oheight + i * owidth + j;
           THIndex_t *indzp = indz_p + k * otime * owidth * oheight
             + ti * owidth * oheight + i * owidth + j;
 
-	  /* compute local max: */
-	  real maxval = -THInf;
-	  int x,y,z;
-	  int mx, my, mz;
-	  mx = my = mz = -1;
+          /* compute local max: */
+          int64_t maxindex = -1;
+          real maxval = -THInf;
+          int64_t x,y,z;
+          int64_t index = 0;
 
-          for (z = 0; z < kernel_t; z++)
+          for (z = start_t; z < end_t; z += dilationT)
           {
-            for (y = 0; y < kernel_h; y++)
+            for (y = start_h; y < end_h; y += dilationH)
             {
-              for (x = 0; x < kernel_w; x++)
+              for (x = start_w; x < end_w; x += dilationW)
               {
-                if ((start_t + z * dilationT < itime) && (start_h + y * dilationH < iheight) && (start_w + x * dilationW < iwidth))
+                index = z * iwidth * iheight + y * iwidth + x;
+                real val = ip[index];
+                if (val > maxval)
                 {
-                  real val = *(ip + z * dilationT * iwidth * iheight + y * dilationH * iwidth + x * dilationW);
-                  if (val > maxval)
-                  {
-                    maxval = val;
-                    // Store indices w.r.t the kernel dimension
-                    mz = z + (kT - kernel_t);
-                    my = y + (kH - kernel_h);
-                    mx = x + (kW - kernel_w);
-                  }
+                  maxval = val;
+                  maxindex = index;
                 }
               }
             }
           }
 
-          // set max values
-          ((unsigned char*)(indzp))[0] = mz;
-          ((unsigned char*)(indzp))[1] = my;
-          ((unsigned char*)(indzp))[2] = mx;
-          ((unsigned char*)(indzp))[3] = 0;
+          // store location of max
+          *indzp = maxindex + TH_INDEX_BASE;
 
           /* set output to local max */
           *op = maxval;
@@ -218,13 +209,13 @@ void THNN_(VolumetricDilatedMaxPooling_updateOutput)(
           int dilationH,
           bool ceilMode)
 {
-  long nslices;
-  long itime;
-  long iheight;
-  long iwidth;
-  long otime;
-  long oheight;
-  long owidth;
+  int64_t nslices;
+  int64_t itime;
+  int64_t iheight;
+  int64_t iwidth;
+  int64_t otime;
+  int64_t oheight;
+  int64_t owidth;
   real *input_data;
   real *output_data;
   THIndex_t *indices_data;
@@ -306,11 +297,11 @@ void THNN_(VolumetricDilatedMaxPooling_updateOutput)(
   }
   else /* batch mode */
   {
-    long p;
-    long nBatch = input->size[0];
+    int64_t p;
+    int64_t nBatch = input->size[0];
 
-    long istride = nslices * itime * iwidth * iheight;
-    long ostride = nslices * otime * owidth * oheight;
+    int64_t istride = nslices * itime * iwidth * iheight;
+    int64_t ostride = nslices * otime * owidth * oheight;
 
     /* resize output */
     THTensor_(resize5d)(output, nBatch, nslices, otime, oheight, owidth);
@@ -347,13 +338,13 @@ static void THNN_(VolumetricDilatedMaxPooling_updateGradInput_frame)(
           real *gradInput_p,
           real *gradOutput_p,
           THIndex_t *indz_p,
-          long nslices,
-          long itime,
-          long iwidth,
-          long iheight,
-          long otime,
-          long owidth,
-          long oheight,
+          int64_t nslices,
+          int64_t itime,
+          int64_t iwidth,
+          int64_t iheight,
+          int64_t otime,
+          int64_t owidth,
+          int64_t oheight,
           int dT,
           int dW,
           int dH,
@@ -364,7 +355,7 @@ static void THNN_(VolumetricDilatedMaxPooling_updateGradInput_frame)(
           int dilationW,
           int dilationH)
 {
-  long k;
+  int64_t k;
 #pragma omp parallel for private(k)
   for (k = 0; k < nslices; k++)
   {
@@ -373,7 +364,7 @@ static void THNN_(VolumetricDilatedMaxPooling_updateGradInput_frame)(
     THIndex_t *indz_p_k = indz_p + k * otime * owidth * oheight;
 
     /* calculate max points */
-    long ti, i, j;
+    int64_t ti, i, j;
     for (ti = 0; ti < otime; ti++)
     {
       for (i = 0; i < oheight; i++)
@@ -381,16 +372,13 @@ static void THNN_(VolumetricDilatedMaxPooling_updateGradInput_frame)(
         for (j = 0; j < owidth; j++)
         {
           /* retrieve position of max */
-          THIndex_t * indzp = &indz_p_k[ti * oheight * owidth + i * owidth + j];
-          long maxti = ((unsigned char*)(indzp))[0] * dilationT + ti * dT - pT;
-          long maxi  = ((unsigned char*)(indzp))[1] * dilationH + i * dH - pH;
-          long maxj  = ((unsigned char*)(indzp))[2] * dilationW + j * dW - pW;
+          int64_t index = ti * oheight * owidth + i * owidth + j;
+          int64_t maxp = indz_p_k[index] - TH_INDEX_BASE;
 
-	  if (maxti != -1) {
-	    /* update gradient */
-	    gradInput_p_k[maxti * iheight * iwidth + maxi * iwidth + maxj] +=
-	      gradOutput_p_k[ti * oheight * owidth + i * owidth + j];
-	  }
+          if (maxp != -1) {
+            /* update gradient */
+            gradInput_p_k[maxp] += gradOutput_p_k[index];
+          }
         }
       }
     }
@@ -485,11 +473,11 @@ void THNN_(VolumetricDilatedMaxPooling_updateGradInput)(
   }
   else /* batch mode */
   {
-    long p;
-    long nBatch = input->size[0];
+    int64_t p;
+    int64_t nBatch = input->size[0];
 
-    long istride = nslices * itime * iwidth * iheight;
-    long ostride = nslices * otime * owidth * oheight;
+    int64_t istride = nslices * itime * iwidth * iheight;
+    int64_t ostride = nslices * otime * owidth * oheight;
 
 #pragma omp parallel for private(p)
     for (p = 0; p < nBatch; p++)
