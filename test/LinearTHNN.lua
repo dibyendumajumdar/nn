@@ -45,35 +45,35 @@ end
 
 function LinearTHNN:updateOutput(input)
    input.THNN.Linear_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.weight:cdata(),
-      self.bias and self.bias:cdata(),
-      self.addBuffer:cdata()
+      input,
+      self.output,
+      self.weight,
+      self.bias and self.bias,
+      self.addBuffer
    )
    return self.output
 end
 
 function LinearTHNN:updateGradInput(input, gradOutput)
    input.THNN.Linear_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.weight:cdata()
+      input,
+      gradOutput,
+      self.gradInput,
+      self.weight
    )
    return self.gradInput
 end
 
 function LinearTHNN:accGradParameters(input, gradOutput, scale)
    input.THNN.Linear_accGradParameters(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.weight:cdata(),
-      self.bias and self.bias:cdata(),
-      self.gradWeight:cdata(),
-      self.bias and self.gradBias:cdata(),
-      self.addBuffer:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.weight,
+      self.bias and self.bias,
+      self.gradWeight,
+      self.bias and self.gradBias,
+      self.addBuffer,
       scale or 1
    )
    return self.gradWeight

@@ -17,8 +17,8 @@ function TemporalMaxPooling:updateOutput(input)
        self.indices = self.indices:long()
    end
    input.THNN.TemporalMaxPooling_updateOutput(
-       input:cdata(), self.output:cdata(),
-       self.indices:cdata(), self.kW, self.dW
+       input, self.output,
+       self.indices, self.kW, self.dW
    )
    return self.output
 end
@@ -26,8 +26,8 @@ end
 function TemporalMaxPooling:updateGradInput(input, gradOutput)
     if self.gradInput then
 	input.THNN.TemporalMaxPooling_updateGradInput(
-	    input:cdata(), gradOutput:cdata(),
-	    self.gradInput:cdata(), self.indices:cdata(),
+	    input, gradOutput,
+	    self.gradInput, self.indices,
 	    self.kW, self.dW
 	)
 	return self.gradInput

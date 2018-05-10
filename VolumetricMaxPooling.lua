@@ -48,9 +48,9 @@ function VolumetricMaxPooling:updateOutput(input)
       self.indices = self.indices:long()
    end
    input.THNN.VolumetricMaxPooling_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.indices:cdata(),
+      input,
+      self.output,
+      self.indices,
       self.kT, self.kW, self.kH,
       self.dT, self.dW, self.dH,
       self.padT, self.padW, self.padH,
@@ -61,10 +61,10 @@ end
 
 function VolumetricMaxPooling:updateGradInput(input, gradOutput)
    input.THNN.VolumetricMaxPooling_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.indices:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.indices,
       self.kT, self.kW, self.kH,
       self.dT, self.dW, self.dH,
       self.padT, self.padW, self.padH,

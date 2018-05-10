@@ -6,17 +6,17 @@ end
 
 function Square:updateOutput(input)
    input.THNN.Square_updateOutput(
-      input:cdata(),
-      self.output:cdata()
+      input,
+      self.output
    )
    return self.output
 end
 
 function Square:updateGradInput(input, gradOutput)
    input.THNN.Square_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata()
+      input,
+      gradOutput,
+      self.gradInput
    )
    return self.gradInput
 end

@@ -16,17 +16,17 @@ end
 
 function ReLU6:updateOutput(input)
    input.THNN.HardTanh_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       0, 6, self.inplace)
    return self.output
 end
 
 function ReLU6:updateGradInput(input, gradOutput)
    input.THNN.HardTanh_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
       0, 6, self.inplace)
    return self.gradInput
 end

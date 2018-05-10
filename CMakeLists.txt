@@ -1,7 +1,17 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)
 CMAKE_POLICY(VERSION 2.6)
 
+option(USE_LUA53 "Controls whether the library will be for Lua 5.3 or Ravi, default is OFF" OFF)
+
+SET(CMAKE_MODULE_PATH
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+  "${CMAKE_MODULE_PATH}")
+
 INCLUDE(${CMAKE_INSTALL_PREFIX}/share/cmake/torch/TorchConfig.cmake)
+
+IF (MSVC)
+	ADD_DEFINITIONS("/DTHNN_EXPORTS")
+ENDIF()
 
 ADD_SUBDIRECTORY(lib)
 

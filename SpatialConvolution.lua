@@ -77,12 +77,12 @@ function SpatialConvolution:updateOutput(input)
    assert(input.THNN, torch.type(input)..'.THNN backend not imported')
    backCompatibility(self)
    input.THNN.SpatialConvolutionMM_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.weight:cdata(),
+      input,
+      self.output,
+      self.weight,
       THNN.optionalTensor(self.bias),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      self.finput,
+      self.fgradInput,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH
@@ -95,12 +95,12 @@ function SpatialConvolution:updateGradInput(input, gradOutput)
    if self.gradInput then
       backCompatibility(self)
       input.THNN.SpatialConvolutionMM_updateGradInput(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradInput:cdata(),
-         self.weight:cdata(),
-         self.finput:cdata(),
-         self.fgradInput:cdata(),
+         input,
+         gradOutput,
+         self.gradInput,
+         self.weight,
+         self.finput,
+         self.fgradInput,
          self.kW, self.kH,
          self.dW, self.dH,
          self.padW, self.padH
@@ -114,12 +114,12 @@ function SpatialConvolution:accGradParameters(input, gradOutput, scale)
    scale = scale or 1
    backCompatibility(self)
    input.THNN.SpatialConvolutionMM_accGradParameters(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradWeight:cdata(),
+      input,
+      gradOutput,
+      self.gradWeight,
       THNN.optionalTensor(self.gradBias),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      self.finput,
+      self.fgradInput,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,

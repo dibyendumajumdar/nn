@@ -12,7 +12,7 @@ end
 function SpatialReplicationPadding:updateOutput(input)
    if input:dim() == 3 or input:dim() == 4 then
       input.THNN.SpatialReplicationPadding_updateOutput(
-         input:cdata(), self.output:cdata(),
+         input, self.output,
          self.pad_l, self.pad_r, self.pad_t, self.pad_b)
    else
       error('input must be 3 or 4-dimensional')
@@ -39,7 +39,7 @@ function SpatialReplicationPadding:updateGradInput(input, gradOutput)
          )
    end
    input.THNN.SpatialReplicationPadding_updateGradInput(
-      input:cdata(), gradOutput:cdata(), self.gradInput:cdata(),
+      input, gradOutput, self.gradInput,
       self.pad_l, self.pad_r, self.pad_t, self.pad_b)
    return self.gradInput
 end

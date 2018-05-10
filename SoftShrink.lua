@@ -7,8 +7,8 @@ end
 
 function SoftShrink:updateOutput(input)
    input.THNN.SoftShrink_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.lambda
    )
    return self.output
@@ -16,9 +16,9 @@ end
 
 function SoftShrink:updateGradInput(input, gradOutput)
    input.THNN.SoftShrink_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
       self.lambda
    )
    return self.gradInput

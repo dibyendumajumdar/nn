@@ -9,8 +9,8 @@ end
 function SoftPlus:updateOutput(input)
    -- f(x) = 1/beta * log(1 + exp(beta * x))
    input.THNN.SoftPlus_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.beta,
       self.threshold
    )
@@ -24,10 +24,10 @@ function SoftPlus:updateGradInput(input, gradOutput)
    -- THEREFORE:
    -- d/dx(f(x)) = (exp(k*y) - 1) / exp(k*y)
    input.THNN.SoftPlus_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.output:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.output,
       self.beta,
       self.threshold
    )

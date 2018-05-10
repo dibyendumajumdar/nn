@@ -45,9 +45,9 @@ function SpatialMaxPooling:updateOutput(input)
    self.padW = self.padW or 0
    self.padH = self.padH or 0
    input.THNN.SpatialMaxPooling_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.indices:cdata(),
+      input,
+      self.output,
+      self.indices,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,
@@ -58,10 +58,10 @@ end
 
 function SpatialMaxPooling:updateGradInput(input, gradOutput)
    input.THNN.SpatialMaxPooling_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.indices:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.indices,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,

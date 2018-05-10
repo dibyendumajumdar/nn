@@ -80,8 +80,8 @@ function SpatialUpSamplingBilinear:updateOutput(input)
    local ydim = xdim - 1
    self:setSize(input)
    input.THNN.SpatialUpSamplingBilinear_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.outputSize[ydim],
       self.outputSize[xdim]
    )
@@ -109,8 +109,8 @@ function SpatialUpSamplingBilinear:updateGradInput(input, gradOutput)
    local ydim = xdim - 1
    self.gradInput:resizeAs(input)   
    input.THNN.SpatialUpSamplingBilinear_updateGradInput(
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      gradOutput,
+      self.gradInput,
       input:size(1),
       input:size(2),
       input:size(3),

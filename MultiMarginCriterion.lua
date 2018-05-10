@@ -28,9 +28,9 @@ function MultiMarginCriterion:updateOutput(input, target)
    self.p = self.p or 1
    self.output_tensor = self.output_tensor or input.new(1)
    input.THNN.MultiMarginCriterion_updateOutput(
-      input:cdata(),
-      target:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      target,
+      self.output_tensor,
       self.sizeAverage,
       self.p,
       THNN.optionalTensor(self.weights),
@@ -52,9 +52,9 @@ function MultiMarginCriterion:updateGradInput(input, target)
      target = target:long()
    end
    input.THNN.MultiMarginCriterion_updateGradInput(
-      input:cdata(),
-      target:cdata(),
-      self.gradInput:cdata(),
+      input,
+      target,
+      self.gradInput,
       self.sizeAverage,
       self.p,
       THNN.optionalTensor(self.weights),

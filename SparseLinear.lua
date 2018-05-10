@@ -59,10 +59,10 @@ function SparseLinear:updateOutput(input)
 
    if legacyMode then
       input.THNN.SparseLinear_legacyUpdateOutput(
-         input:cdata(),
-         self.output:cdata(),
-         self.weight:cdata(),
-         self.bias:cdata()
+         input,
+         self.output,
+         self.weight,
+         self.bias
       )
    else
       local nbatches = #input
@@ -86,10 +86,10 @@ function SparseLinear:updateOutput(input)
 
       self.output:resize(nbatches, self.weight:size(1))
       input[1].THNN.SparseLinear_updateOutput(
-         self.formatted_input:cdata(),
-         self.output:cdata(),
-         self.weight:cdata(),
-         self.bias:cdata()
+         self.formatted_input,
+         self.output,
+         self.weight,
+         self.bias
       )
 
       -- fix output size for batchSize = 1
@@ -116,12 +116,12 @@ function SparseLinear:accGradParameters(input, gradOutput, scale)
 
    if legacyMode then
       input.THNN.SparseLinear_legacyAccGradParameters(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradWeight:cdata(),
-         self.gradBias:cdata(),
-         self.weight:cdata(),
-         self.bias:cdata(),
+         input,
+         gradOutput,
+         self.gradWeight,
+         self.gradBias,
+         self.weight,
+         self.bias,
          self.weightDecay or 0,
          scale or 1
       )
@@ -136,12 +136,12 @@ function SparseLinear:accGradParameters(input, gradOutput, scale)
       local _, inds = sortinds:sort(1, false)
       local newinput = self.formatted_input:index(1, inds)
       input[1].THNN.SparseLinear_accGradParameters(
-         newinput:cdata(),
-         gradOutput:cdata(),
-         self.gradWeight:cdata(),
-         self.gradBias:cdata(),
-         self.weight:cdata(),
-         self.bias:cdata(),
+         newinput,
+         gradOutput,
+         self.gradWeight,
+         self.gradBias,
+         self.weight,
+         self.bias,
          self.weightDecay or 0,
          scale or 1
       )
@@ -192,20 +192,20 @@ function SparseLinear:updateParameters(learningRate)
    if self.lastInput and self.sparseUpdate == ONE_LAST_INPUT then
       if self.legacyMode then
          self.lastInput.THNN.SparseLinear_legacyUpdateParameters(
-            self.weight:cdata(),
-            self.bias:cdata(),
-            self.gradWeight:cdata(),
-            self.gradBias:cdata(),
-            self.lastInput:cdata(),
+            self.weight,
+            self.bias,
+            self.gradWeight,
+            self.gradBias,
+            self.lastInput,
             learningRate
          )
       else
          self.lastInput.THNN.SparseLinear_updateParameters(
-            self.weight:cdata(),
-            self.bias:cdata(),
-            self.gradWeight:cdata(),
-            self.gradBias:cdata(),
-            self.lastInput:cdata(),
+            self.weight,
+            self.bias,
+            self.gradWeight,
+            self.gradBias,
+            self.lastInput,
             learningRate
          )
       end
@@ -218,15 +218,15 @@ function SparseLinear:zeroGradParameters()
    if self.lastInput and self.sparseUpdate == ONE_LAST_INPUT then
       if self.legacyMode then
          self.lastInput.THNN.SparseLinear_legacyZeroGradParameters(
-            self.gradWeight:cdata(),
-            self.gradBias:cdata(),
-            self.lastInput:cdata()
+            self.gradWeight,
+            self.gradBias,
+            self.lastInput
          )
       else
          self.lastInput.THNN.SparseLinear_zeroGradParameters(
-            self.gradWeight:cdata(),
-            self.gradBias:cdata(),
-            self.lastInput:cdata()
+            self.gradWeight,
+            self.gradBias,
+            self.lastInput
          )
       end
    else

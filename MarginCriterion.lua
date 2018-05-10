@@ -9,9 +9,9 @@ end
 function MarginCriterion:updateOutput(input, target)
    self.output_tensor = self.output_tensor or input.new(1)
    input.THNN.MarginCriterion_updateOutput(
-      input:cdata(),
-      target:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      target,
+      self.output_tensor,
       self.sizeAverage,
       self.margin
    )
@@ -21,9 +21,9 @@ end
 
 function MarginCriterion:updateGradInput(input, target)
    input.THNN.MarginCriterion_updateGradInput(
-      input:cdata(),
-      target:cdata(),
-      self.gradInput:cdata(),
+      input,
+      target,
+      self.gradInput,
       self.sizeAverage,
       self.margin
    )

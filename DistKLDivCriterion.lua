@@ -11,9 +11,9 @@ function DistKLDivCriterion:updateOutput(input, target)
       'input and target should have the same size')
    self.output_tensor = self.output_tensor or input.new(1)
    input.THNN.DistKLDivCriterion_updateOutput(
-      input:cdata(),
-      target:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      target,
+      self.output_tensor,
       self.sizeAverage
    )
    self.output = self.output_tensor[1]
@@ -25,9 +25,9 @@ function DistKLDivCriterion:updateGradInput(input, target)
       torch.LongTensor(input:size()):eq(torch.LongTensor(target:size())):all(),
       'input and target should have the same size')
    input.THNN.DistKLDivCriterion_updateGradInput(
-      input:cdata(),
-      target:cdata(),
-      self.gradInput:cdata(),
+      input,
+      target,
+      self.gradInput,
       self.sizeAverage
    )
    return self.gradInput

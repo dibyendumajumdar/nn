@@ -38,8 +38,8 @@ end
 
 function TemporalSubSampling:updateOutput(input)
     input.THNN.TemporalSubSampling_updateOutput(
-	input:cdata(), self.output:cdata(),
-	self.weight:cdata(), self.bias:cdata(),
+	input, self.output,
+	self.weight, self.bias,
 	self.kW, self.dW, self.inputFrameSize
     )
    return self.output
@@ -48,8 +48,8 @@ end
 function TemporalSubSampling:updateGradInput(input, gradOutput)
     if self.gradInput then
 	input.THNN.TemporalSubSampling_updateGradInput(
-	    input:cdata(), gradOutput:cdata(), self.gradInput:cdata(),
-	    self.weight:cdata(), self.kW, self.dW
+	    input, gradOutput, self.gradInput,
+	    self.weight, self.kW, self.dW
 	)
 	return self.gradInput
    end
@@ -58,7 +58,7 @@ end
 function TemporalSubSampling:accGradParameters(input, gradOutput, scale)
     scale = scale or 1
     input.THNN.TemporalSubSampling_accGradParameters(
-	input:cdata(), gradOutput:cdata(), self.gradWeight:cdata(),
-	self.gradBias:cdata(), self.kW, self.dW, scale
+	input, gradOutput, self.gradWeight,
+	self.gradBias, self.kW, self.dW, scale
     )
 end

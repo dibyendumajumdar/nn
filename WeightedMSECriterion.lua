@@ -17,9 +17,9 @@ function WeightedMSECriterion:updateOutput(input,target)
    end
    self.output_tensor = self.output_tensor or input.new(1)
    input.THNN.MSECriterion_updateOutput(
-      input:cdata(),
-      self.buffer:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      self.buffer,
+      self.output_tensor,
       self.sizeAverage
    )
    self.output = self.output_tensor[1]
@@ -36,9 +36,9 @@ function WeightedMSECriterion:updateGradInput(input, target)
       self.buffer:cmul(self.weight)
    end
    input.THNN.MSECriterion_updateGradInput(
-      input:cdata(),
-      self.buffer:cdata(),
-      self.gradInput:cdata(),
+      input,
+      self.buffer,
+      self.gradInput,
       self.sizeAverage
    )
    return self.gradInput

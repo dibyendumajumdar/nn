@@ -41,12 +41,12 @@ function TemporalRowConvolution:updateOutput(input)
   self.fgradInput = self.fgradInput or input.new()
 
   input.THNN.TemporalRowConvolution_updateOutput(
-    input:cdata(),
-    self.output:cdata(),
-    self.weight:cdata(),
+    input,
+    self.output,
+    self.weight,
     THNN.optionalTensor(self.bias),
-    self.finput:cdata(),
-    self.fgradInput:cdata(),
+    self.finput,
+    self.fgradInput,
     self.kW,
     self.dW,
     0, -- would be self.padW
@@ -61,12 +61,12 @@ function TemporalRowConvolution:updateGradInput(input, gradOutput)
 
   if self.gradInput then
     input.THNN.TemporalRowConvolution_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.weight:cdata(),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.weight,
+      self.finput,
+      self.fgradInput,
       self.kW,
       self.dW,
       0, -- would be self.padW
@@ -80,12 +80,12 @@ function TemporalRowConvolution:accGradParameters(input, gradOutput, scale)
   assert(input.THNN, torch.type(input)..".THNN backend not imported")
 
   input.THNN.TemporalRowConvolution_accGradParameters(
-    input:cdata(),
-    gradOutput:cdata(),
-    self.gradWeight:cdata(),
+    input,
+    gradOutput,
+    self.gradWeight,
     THNN.optionalTensor(self.gradBias),
-    self.finput:cdata(),
-    self.fgradInput:cdata(),
+    self.finput,
+    self.fgradInput,
     self.kW,
     self.dW,
     0, -- would be self.padW

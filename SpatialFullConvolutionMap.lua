@@ -49,11 +49,11 @@ end
 
 function SpatialFullConvolutionMap:updateOutput(input)
    input.THNN.SpatialFullConvolutionMap_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.weight:cdata(),
-      self.bias:cdata(),
-      self.connTable:cdata(),
+      input,
+      self.output,
+      self.weight,
+      self.bias,
+      self.connTable,
       self.nInputPlane,
       self.nOutputPlane,
       self.dW, self.dH
@@ -63,12 +63,12 @@ end
 
 function SpatialFullConvolutionMap:updateGradInput(input, gradOutput)
    input.THNN.SpatialFullConvolutionMap_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.weight:cdata(),
-      self.bias:cdata(),
-      self.connTable:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.weight,
+      self.bias,
+      self.connTable,
       self.nInputPlane,
       self.nOutputPlane,
       self.dW, self.dH
@@ -78,11 +78,11 @@ end
 
 function SpatialFullConvolutionMap:accGradParameters(input, gradOutput, scale)
    input.THNN.SpatialFullConvolutionMap_accGradParameters(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradWeight:cdata(),
-      self.gradBias:cdata(),
-      self.connTable:cdata(),
+      input,
+      gradOutput,
+      self.gradWeight,
+      self.gradBias,
+      self.connTable,
       self.nInputPlane,
       self.nOutputPlane,
       self.dW, self.dH,

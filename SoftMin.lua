@@ -4,8 +4,8 @@ function SoftMin:updateOutput(input)
    self.mininput = self.mininput or input.new()
    self.mininput:resizeAs(input):copy(input):mul(-1)
    input.THNN.SoftMax_updateOutput(
-      self.mininput:cdata(),
-      self.output:cdata()
+      self.mininput,
+      self.output
    )
    return self.output
 end
@@ -15,10 +15,10 @@ function SoftMin:updateGradInput(input, gradOutput)
    self.mininput:resizeAs(input):copy(input):mul(-1)
 
    input.THNN.SoftMax_updateGradInput(
-      self.mininput:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.output:cdata()
+      self.mininput,
+      gradOutput,
+      self.gradInput,
+      self.output
    )
 
    self.gradInput:mul(-1)

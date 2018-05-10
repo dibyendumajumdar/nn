@@ -8,8 +8,8 @@ end
 function GatedLinearUnit:updateOutput(input)
    local dim = self.dim or input:dim()
    input.THNN.GatedLinear_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       dim
    )
    return self.output
@@ -18,9 +18,9 @@ end
 function GatedLinearUnit:updateGradInput(input, gradOutput)
    local dim = self.dim or input:dim()
    input.THNN.GatedLinear_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
       dim
    )
    return self.gradInput

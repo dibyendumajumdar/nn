@@ -14,9 +14,9 @@ end
 function RReLU:updateOutput(input)
    local gen = ffi.typeof('THGenerator**')(torch._gen)[0]
    input.THNN.RReLU_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.noise:cdata(),
+      input,
+      self.output,
+      self.noise,
       self.lower,
       self.upper,
       self.train,
@@ -28,10 +28,10 @@ end
 
 function RReLU:updateGradInput(input, gradOutput)
    input.THNN.RReLU_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.noise:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.noise,
       self.lower,
       self.upper,
       self.train,

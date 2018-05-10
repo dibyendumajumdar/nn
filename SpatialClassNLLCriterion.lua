@@ -41,12 +41,12 @@ function SpatialClassNLLCriterion:updateOutput(input, target)
    end
 
    input.THNN.SpatialClassNLLCriterion_updateOutput(
-      input:cdata(),
-      self.target:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      self.target,
+      self.output_tensor,
       self.sizeAverage,
       THNN.optionalTensor(self.weights),
-      self.total_weight_tensor:cdata()
+      self.total_weight_tensor
    )
    self.output = self.output_tensor[1]
    return self.output, self.total_weight_tensor[1]
@@ -69,12 +69,12 @@ function SpatialClassNLLCriterion:updateGradInput(input, target)
    self.gradInput:resizeAs(input):zero()
 
    input.THNN.SpatialClassNLLCriterion_updateGradInput(
-      input:cdata(),
-      self.target:cdata(),
-      self.gradInput:cdata(),
+      input,
+      self.target,
+      self.gradInput,
       self.sizeAverage,
       THNN.optionalTensor(self.weights),
-      self.total_weight_tensor:cdata()
+      self.total_weight_tensor
    )
 
    return self.gradInput

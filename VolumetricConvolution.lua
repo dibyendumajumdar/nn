@@ -61,22 +61,22 @@ function VolumetricConvolution:updateOutput(input)
    self.fgradInput = self.fgradInput or input.new()
    if torch.typename(input):find('torch%.Cuda.*Tensor') then
       input.THNN.VolumetricConvolution_updateOutput(
-        input:cdata(),
-        self.output:cdata(),
-        self.weight:cdata(),
+        input,
+        self.output,
+        self.weight,
         THNN.optionalTensor(self.bias),
-        self.finput:cdata(),
-        self.fgradInput:cdata(),
+        self.finput,
+        self.fgradInput,
         self.dT, self.dW, self.dH,
         self.padT, self.padW, self.padH
       )
    else
       input.THNN.VolumetricConvolutionMM_updateOutput(
-         input:cdata(),
-         self.output:cdata(),
-         self.weight:cdata(),
+         input,
+         self.output,
+         self.weight,
          THNN.optionalTensor(self.bias),
-         self.finput:cdata(),
+         self.finput,
          self.kT, self.kW, self.kH,
          self.dT, self.dW, self.dH,
          self.padT, self.padW, self.padH
@@ -88,11 +88,11 @@ end
 function VolumetricConvolution:updateGradInput(input, gradOutput)
    if torch.typename(input):find('torch%.Cuda.*Tensor') then
       input.THNN.VolumetricConvolution_updateGradInput(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradInput:cdata(),
-         self.weight:cdata(),
-         self.finput:cdata(),
+         input,
+         gradOutput,
+         self.gradInput,
+         self.weight,
+         self.finput,
          self.dT, self.dW, self.dH,
          self.padT, self.padW, self.padH
       )
@@ -100,12 +100,12 @@ function VolumetricConvolution:updateGradInput(input, gradOutput)
    else
       if self.gradInput then
          input.THNN.VolumetricConvolutionMM_updateGradInput(
-            input:cdata(),
-            gradOutput:cdata(),
-            self.gradInput:cdata(),
-            self.weight:cdata(),
-            self.finput:cdata(),
-            self.fgradInput:cdata(),
+            input,
+            gradOutput,
+            self.gradInput,
+            self.weight,
+            self.finput,
+            self.fgradInput,
             self.kT, self.kW, self.kH,
             self.dT, self.dW, self.dH,
             self.padT, self.padW, self.padH
@@ -118,23 +118,23 @@ end
 function VolumetricConvolution:accGradParameters(input, gradOutput, scale)
    if torch.typename(input):find('torch%.Cuda.*Tensor') then
       input.THNN.VolumetricConvolution_accGradParameters(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradWeight:cdata(),
+         input,
+         gradOutput,
+         self.gradWeight,
          THNN.optionalTensor(self.gradBias),
-         self.finput:cdata(),
-         self.fgradInput:cdata(),
+         self.finput,
+         self.fgradInput,
          self.dT, self.dW, self.dH,
          self.padT, self.padW, self.padH,
          scale or 1
       )
    else
       input.THNN.VolumetricConvolutionMM_accGradParameters(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradWeight:cdata(),
+         input,
+         gradOutput,
+         self.gradWeight,
          THNN.optionalTensor(self.gradBias),
-         self.finput:cdata(),
+         self.finput,
          self.kT, self.kW, self.kH,
          self.dT, self.dW, self.dH,
          self.padT, self.padW, self.padH,

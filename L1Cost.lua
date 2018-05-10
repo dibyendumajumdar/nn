@@ -8,8 +8,8 @@ end
 function L1Cost:updateOutput(input)
    self.output_tensor = self.output_tensor or input.new(1)
    input.THNN.L1Cost_updateOutput(
-      input:cdata(),
-      self.output_tensor:cdata()
+      input,
+      self.output_tensor
    )
    self.output = self.output_tensor[1]
    return self.output
@@ -17,9 +17,9 @@ end
 
 function L1Cost:updateGradInput(input)
    input.THNN.L1Cost_updateGradInput(
-      input:cdata(),
+      input,
       THNN.NULL,
-      self.gradInput:cdata()
+      self.gradInput
    )
    return self.gradInput
 end

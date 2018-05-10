@@ -122,14 +122,14 @@ function BN:updateOutput(input)
    self.save_std:resizeAs(self.running_var)
 
    input.THNN.BatchNormalization_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       THNN.optionalTensor(self.weight),
       THNN.optionalTensor(self.bias),
-      self.running_mean:cdata(),
-      self.running_var:cdata(),
-      self.save_mean:cdata(),
-      self.save_std:cdata(),
+      self.running_mean,
+      self.running_var,
+      self.save_mean,
+      self.save_std,
       self.train and (input:size(1) > 1), -- don't update running_[var,mean] when batchsize = 1
       self.momentum,
       self.eps)
@@ -152,16 +152,16 @@ local function backward(self, input, gradOutput, scale, gradInput, gradWeight, g
    end
 
    input.THNN.BatchNormalization_backward(
-      input:cdata(),
-      gradOutput:cdata(),
+      input,
+      gradOutput,
       THNN.optionalTensor(gradInput),
       THNN.optionalTensor(gradWeight),
       THNN.optionalTensor(gradBias),
       THNN.optionalTensor(self.weight),
-      self.running_mean:cdata(),
-      self.running_var:cdata(),
-      self.save_mean:cdata(),
-      self.save_std:cdata(),
+      self.running_mean,
+      self.running_var,
+      self.save_mean,
+      self.save_std,
       self.train and (input:size(1) > 1), -- don't update running_[var,mean] when batchsize = 1
       scale,
       self.eps)

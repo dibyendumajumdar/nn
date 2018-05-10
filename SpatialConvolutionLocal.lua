@@ -103,12 +103,12 @@ function SpatialConvolutionLocal:updateOutput(input)
    checkInputSize(self, input)
    viewWeight(self)
    input.THNN.SpatialConvolutionLocal_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.weight:cdata(),
-      self.bias:cdata(),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      input,
+      self.output,
+      self.weight,
+      self.bias,
+      self.finput,
+      self.fgradInput,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,
@@ -125,12 +125,12 @@ function SpatialConvolutionLocal:updateGradInput(input, gradOutput)
    if self.gradInput then
       viewWeight(self)
       input.THNN.SpatialConvolutionLocal_updateGradInput(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradInput:cdata(),
-         self.weight:cdata(),
-         self.finput:cdata(),
-         self.fgradInput:cdata(),
+         input,
+         gradOutput,
+         self.gradInput,
+         self.weight,
+         self.finput,
+         self.fgradInput,
          self.kW, self.kH,
          self.dW, self.dH,
          self.padW, self.padH,
@@ -148,12 +148,12 @@ function SpatialConvolutionLocal:accGradParameters(input, gradOutput, scale)
    checkOutputSize(self, input, gradOutput)
    viewWeight(self)
    input.THNN.SpatialConvolutionLocal_accGradParameters(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradWeight:cdata(),
-      self.gradBias:cdata(),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradWeight,
+      self.gradBias,
+      self.finput,
+      self.fgradInput,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,

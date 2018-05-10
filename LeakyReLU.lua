@@ -17,8 +17,8 @@ end
 
 function LeakyReLU:updateOutput(input)
       input.THNN.LeakyReLU_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.negval,
       self.inplace
    )
@@ -27,9 +27,9 @@ end
 
 function LeakyReLU:updateGradInput(input, gradOutput)
    input.THNN.LeakyReLU_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
       self.negval,
       self.inplace
    )

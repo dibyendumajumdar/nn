@@ -12,12 +12,12 @@ function SpatialDilatedConvolution:updateOutput(input)
    self.finput = self.finput or self.weight.new()
    self.fgradInput = self.fgradInput or self.weight.new()
    input.THNN.SpatialDilatedConvolution_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.weight:cdata(),
+      input,
+      self.output,
+      self.weight,
       THNN.optionalTensor(self.bias),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      self.finput,
+      self.fgradInput,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,
@@ -30,11 +30,11 @@ function SpatialDilatedConvolution:updateGradInput(input, gradOutput)
    if self.gradInput then
       self.fgradInput = self.fgradInput or self.weight.new()
       input.THNN.SpatialDilatedConvolution_updateGradInput(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradInput:cdata(),
-         self.weight:cdata(),
-         self.finput:cdata(),
+         input,
+         gradOutput,
+         self.gradInput,
+         self.weight,
+         self.finput,
          self.kW, self.kH,
          self.dW, self.dH,
          self.padW, self.padH,
@@ -48,12 +48,12 @@ function SpatialDilatedConvolution:accGradParameters(input, gradOutput, scale)
    scale = scale or 1
    self.fgradInput = self.fgradInput or self.weight.new()
    input.THNN.SpatialDilatedConvolution_accGradParameters(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradWeight:cdata(),
+      input,
+      gradOutput,
+      self.gradWeight,
       THNN.optionalTensor(self.gradBias),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      self.finput,
+      self.fgradInput,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,

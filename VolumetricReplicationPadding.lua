@@ -15,7 +15,7 @@ end
 function VolumetricReplicationPadding:updateOutput(input)
    if input:dim() == 4 or input:dim() == 5 then
       input.THNN.VolumetricReplicationPadding_updateOutput(
-         input:cdata(), self.output:cdata(),
+         input, self.output,
          self.pleft, self.pright, self.ptop, self.pbottom, self.pfront,
          self.pback)
    else
@@ -45,7 +45,7 @@ function VolumetricReplicationPadding:updateGradInput(input, gradOutput)
          )
    end
    input.THNN.VolumetricReplicationPadding_updateGradInput(
-      input:cdata(), gradOutput:cdata(), self.gradInput:cdata(),
+      input, gradOutput, self.gradInput,
       self.pleft, self.pright, self.ptop, self.pbottom, self.pfront, self.pback)
    return self.gradInput
 end

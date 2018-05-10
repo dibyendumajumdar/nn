@@ -84,9 +84,9 @@ function ClassSimplexCriterion:updateOutput(input, target)
     assert(input:nElement() == self._target:nElement())
     self.output_tensor = self.output_tensor or input.new(1)
     input.THNN.MSECriterion_updateOutput(
-      input:cdata(),
-      self._target:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      self._target,
+      self.output_tensor,
       self.sizeAverage
     )
     self.output = self.output_tensor[1]
@@ -96,9 +96,9 @@ end
 function ClassSimplexCriterion:updateGradInput(input, target)
     assert(input:nElement() == self._target:nElement())
     input.THNN.MSECriterion_updateGradInput(
-      input:cdata(),
-      self._target:cdata(),
-      self.gradInput:cdata(),
+      input,
+      self._target,
+      self.gradInput,
       self.sizeAverage
     )
     return self.gradInput

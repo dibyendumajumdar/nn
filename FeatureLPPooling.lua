@@ -46,8 +46,8 @@ function FeatureLPPooling:__init(width, stride, power, batch_mode)
 end
 
 function FeatureLPPooling:updateOutput(input)
-   input.THNN.FeatureLPPooling_updateOutput(input:cdata(),
-                                            self.output:cdata(),
+   input.THNN.FeatureLPPooling_updateOutput(input,
+                                            self.output,
                                             self.power,
                                             self.width,
                                             self.stride,
@@ -56,10 +56,10 @@ function FeatureLPPooling:updateOutput(input)
 end
 
 function FeatureLPPooling:updateGradInput(input, gradOutput)
-   input.THNN.FeatureLPPooling_updateGradInput(gradOutput:cdata(),
-                                               input:cdata(),
-                                               self.output:cdata(),
-                                               self.gradInput:cdata(),
+   input.THNN.FeatureLPPooling_updateGradInput(gradOutput,
+                                               input,
+                                               self.output,
+                                               self.gradInput,
                                                self.power,
                                                self.width,
                                                self.stride,

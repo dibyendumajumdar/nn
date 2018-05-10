@@ -9,8 +9,8 @@ end
 
 function SpatialAdaptiveAveragePooling:updateOutput(input)
    input.THNN.SpatialAdaptiveAveragePooling_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.W, self.H
    )
    return self.output
@@ -18,9 +18,9 @@ end
 
 function SpatialAdaptiveAveragePooling:updateGradInput(input, gradOutput)
    input.THNN.SpatialAdaptiveAveragePooling_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata()
+      input,
+      gradOutput,
+      self.gradInput
    )
    return self.gradInput
 end

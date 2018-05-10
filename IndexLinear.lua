@@ -205,15 +205,15 @@ function IndexLinear:updateOutput(input)
    self:flattenInputs(input)
 
    self.values.THNN.IndexLinear_updateOutput(
-      self.keys:cdata(),
+      self.keys,
       self.offset,
-      self.values:cdata(),
-      self.sizes:cdata(),
-      self.cumSumSizes:cdata(),
-      self.output:cdata(),
-      self.weight:cdata(),
-      self.bias:cdata(),
-      self.normalizedValues:cdata(),
+      self.values,
+      self.sizes,
+      self.cumSumSizes,
+      self.output,
+      self.weight,
+      self.bias,
+      self.normalizedValues,
       self.train and 1 or 0
       )
 
@@ -225,14 +225,14 @@ end
 
 function IndexLinear:accUpdateGradParameters(input, gradOutput, scale)
    self.values.THNN.IndexLinear_accUpdateGradParameters(
-      self.keys:cdata(),
+      self.keys,
       self.offset,
-      self.normalize > 0 and self.normalizedValues:cdata() or self.values:cdata(),
-      self.sizes:cdata(),
-      self.cumSumSizes:cdata(),
-      gradOutput:cdata(),
-      self.weight:cdata(),
-      self.bias:cdata(),
+      self.normalize > 0 and self.normalizedValues or self.values,
+      self.sizes,
+      self.cumSumSizes,
+      gradOutput,
+      self.weight,
+      self.bias,
       self.weightDecay or 0,
       scale or 1
    )
@@ -246,17 +246,17 @@ function IndexLinear:accGradParameters(input, gradOutput, scale)
    -- get a table of dense running.gradWeight
    self.running.gradWeight[counter] = self.running.gradWeight[counter] or self.values.new()
    self.values.THNN.IndexLinear_accGradParameters(
-      self.keys:cdata(),
+      self.keys,
       self.offset,
-      self.normalize > 0 and self.normalizedValues:cdata() or self.values:cdata(),
-      self.sizes:cdata(),
-      self.cumSumSizes:cdata(),
-      gradOutput:cdata(),
-      self.running.gradWeight[counter]:cdata(),
-      self.gradBias:cdata(),
-      self.weight:cdata(),
-      self.bias:cdata(),
-      self.valuesBuffer:cdata(),
+      self.normalize > 0 and self.normalizedValues or self.values,
+      self.sizes,
+      self.cumSumSizes,
+      gradOutput,
+      self.running.gradWeight[counter],
+      self.gradBias,
+      self.weight,
+      self.bias,
+      self.valuesBuffer,
       self.weightDecay or 0,
       scale or 1
    )
@@ -342,12 +342,12 @@ function IndexLinear:updateParameters(lr)
          self.updateKeys = self.updateKeysBuffer
       end
       self.values.THNN.IndexLinear_updateParameters(
-            self.gradWeight:cdata(),
-            self.gradBias:cdata(),
-            self.weight:cdata(),
-            self.bias:cdata(),
-            self.updateKeys:cdata(),
-            self.cumSumSizes:cdata(),
+            self.gradWeight,
+            self.gradBias,
+            self.weight,
+            self.bias,
+            self.updateKeys,
+            self.cumSumSizes,
             self.offset,
             self.weightDecay or 0,
             lr or error('You must specify a learning rate')

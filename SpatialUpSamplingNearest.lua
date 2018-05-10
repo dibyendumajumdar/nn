@@ -40,8 +40,8 @@ function SpatialUpSamplingNearest:updateOutput(input)
    self.outputSize[ydim] = self.outputSize[ydim] * self.scale_factor
    self.outputSize[xdim] = self.outputSize[xdim] * self.scale_factor
    input.THNN.SpatialUpSamplingNearest_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.scale_factor
    )
    return self.output
@@ -50,9 +50,9 @@ end
 function SpatialUpSamplingNearest:updateGradInput(input, gradOutput)
    self.gradInput:resizeAs(input)
    input.THNN.SpatialUpSamplingNearest_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
       self.scale_factor
    )
    return self.gradInput

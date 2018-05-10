@@ -21,9 +21,9 @@ function SpatialDilatedMaxPooling:updateOutput(input)
    self.iwidth = input:size(dims)
 
    input.THNN.SpatialDilatedMaxPooling_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.indices:cdata(),
+      input,
+      self.output,
+      self.indices,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,
@@ -35,10 +35,10 @@ end
 
 function SpatialDilatedMaxPooling:updateGradInput(input, gradOutput)
    input.THNN.SpatialDilatedMaxPooling_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.indices:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.indices,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,

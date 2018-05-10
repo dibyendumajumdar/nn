@@ -8,8 +8,8 @@ end
 function SoftMarginCriterion:updateOutput(input, target)
    self.output_tensor = self.output_tensor or input.new(1)
    input.THNN.SoftMarginCriterion_updateOutput(
-      input:cdata(), target:cdata(),
-      self.output_tensor:cdata(),
+      input, target,
+      self.output_tensor,
       self.sizeAverage)
    self.output = self.output_tensor[1]
    return self.output
@@ -17,8 +17,8 @@ end
 
 function SoftMarginCriterion:updateGradInput(input, target)
    input.THNN.SoftMarginCriterion_updateGradInput(
-      input:cdata(), target:cdata(),
-      self.gradInput:cdata(),
+      input, target,
+      self.gradInput,
       self.sizeAverage)
    return self.gradInput
 end

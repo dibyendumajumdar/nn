@@ -12,9 +12,9 @@ end
 function MSECriterion:updateOutput(input, target)
    self.output_tensor = self.output_tensor or input.new(1)
    input.THNN.MSECriterion_updateOutput(
-      input:cdata(),
-      target:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      target,
+      self.output_tensor,
       self.sizeAverage
    )
    self.output = self.output_tensor[1]
@@ -23,9 +23,9 @@ end
 
 function MSECriterion:updateGradInput(input, target)
    input.THNN.MSECriterion_updateGradInput(
-      input:cdata(),
-      target:cdata(),
-      self.gradInput:cdata(),
+      input,
+      target,
+      self.gradInput,
       self.sizeAverage
    )
    return self.gradInput

@@ -108,14 +108,14 @@ function UpSampling:updateOutput(input)
    if nDim == 4 then
       if self.mode == 'nearest' then
          input.THNN.SpatialUpSamplingNearest_updateOutput(
-            input:cdata(),
-            self.output:cdata(),
+            input,
+            self.output,
             self.scale_factor
          )
       else
          input.THNN.SpatialUpSamplingBilinear_updateOutput(
-            input:cdata(),
-            self.output:cdata(),
+            input,
+            self.output,
             self.outputSize[ydim],
             self.outputSize[xdim]
          )
@@ -123,14 +123,14 @@ function UpSampling:updateOutput(input)
    else
       if self.mode == 'nearest' then
          input.THNN.VolumetricUpSamplingNearest_updateOutput(
-            input:cdata(),
-            self.output:cdata(),
+            input,
+            self.output,
             self.scale_factor
          )
       else
          input.THNN.VolumetricUpSamplingTrilinear_updateOutput(
-            input:cdata(),
-            self.output:cdata(),
+            input,
+            self.output,
             self.outputSize[zdim],
             self.outputSize[ydim],
             self.outputSize[xdim]
@@ -158,15 +158,15 @@ function UpSampling:updateGradInput(input, gradOutput)
    if nDim == 4 then
       if self.mode == 'nearest' then
          input.THNN.SpatialUpSamplingNearest_updateGradInput(
-            input:cdata(),
-            gradOutput:cdata(),
-            self.gradInput:cdata(),
+            input,
+            gradOutput,
+            self.gradInput,
             self.scale_factor
          )
       else
          input.THNN.SpatialUpSamplingBilinear_updateGradInput(
-            gradOutput:cdata(),
-            self.gradInput:cdata(),
+            gradOutput,
+            self.gradInput,
             input:size(1),
             input:size(2),
             input:size(3),
@@ -178,15 +178,15 @@ function UpSampling:updateGradInput(input, gradOutput)
    else
       if self.mode == 'nearest' then
          input.THNN.VolumetricUpSamplingNearest_updateGradInput(
-            input:cdata(),
-            gradOutput:cdata(),
-            self.gradInput:cdata(),
+            input,
+            gradOutput,
+            self.gradInput,
             self.scale_factor
          )
       else
          input.THNN.VolumetricUpSamplingTrilinear_updateGradInput(
-            gradOutput:cdata(),
-            self.gradInput:cdata(),
+            gradOutput,
+            self.gradInput,
             input:size(1),
             input:size(2),
             input:size(3),

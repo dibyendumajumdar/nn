@@ -3,19 +3,19 @@ local LogSigmoid, parent = torch.class('nn.LogSigmoid', 'nn.Module')
 function LogSigmoid:updateOutput(input)
    self.buffer = self.buffer or input.new()
    input.THNN.LogSigmoid_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.buffer:cdata()
+      input,
+      self.output,
+      self.buffer
    )
    return self.output
 end
 
 function LogSigmoid:updateGradInput(input, gradOutput)
    input.THNN.LogSigmoid_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.buffer:cdata()
+      input,
+      gradOutput,
+      self.gradInput,
+      self.buffer
    )
    return self.gradInput
 end

@@ -103,10 +103,10 @@ function LookupTable:accGradParameters(input, gradOutput, scale)
    end
 
    self.gradWeight.THNN.LookupTable_accGradParameters(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradWeight:cdata(),
-      self._count:cdata(),
+      input,
+      gradOutput,
+      self.gradWeight,
+      self._count,
       THNN.optionalTensor(self._sorted),
       THNN.optionalTensor(self._indices),
       self.shouldScaleGradByFreq or false,
@@ -130,8 +130,8 @@ function LookupTable:renorm(input)
    end
    -- "row_idx" and "weight" will be modified in the C code
    self.weight.THNN.LookupTable_renorm(
-      row_idx:cdata(),
-      self.weight:cdata(),
+      row_idx,
+      self.weight,
       self.maxNorm,
       self.normType or 2
    )

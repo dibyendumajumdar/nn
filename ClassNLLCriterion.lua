@@ -39,12 +39,12 @@ function ClassNLLCriterion:updateOutput(input, target)
    end
 
    input.THNN.ClassNLLCriterion_updateOutput(
-      input:cdata(),
-      self.target:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      self.target,
+      self.output_tensor,
       self.sizeAverage,
       THNN.optionalTensor(self.weights),
-      self.total_weight_tensor:cdata(),
+      self.total_weight_tensor,
       self.ignoreIndex
    )
    self.output = self.output_tensor[1]
@@ -69,12 +69,12 @@ function ClassNLLCriterion:updateGradInput(input, target)
    self.gradInput:resizeAs(input):zero()
 
    input.THNN.ClassNLLCriterion_updateGradInput(
-      input:cdata(),
-      self.target:cdata(),
-      self.gradInput:cdata(),
+      input,
+      self.target,
+      self.gradInput,
       self.sizeAverage,
       THNN.optionalTensor(self.weights),
-      self.total_weight_tensor:cdata(),
+      self.total_weight_tensor,
       self.ignoreIndex
    )
 

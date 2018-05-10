@@ -14,10 +14,10 @@ function MultiLabelMarginCriterion:updateOutput(input, target)
    end
    self.output_tensor = self.output_tensor or input.new(1)
    input.THNN.MultiLabelMarginCriterion_updateOutput(
-      input:cdata(),
-      target:cdata(),
-      self.output_tensor:cdata(),
-      self.isTarget:cdata(),
+      input,
+      target,
+      self.output_tensor,
+      self.isTarget,
       self.sizeAverage
    )
    self.output = self.output_tensor[1]
@@ -31,10 +31,10 @@ function MultiLabelMarginCriterion:updateGradInput(input, target)
      target = target:long()
    end
    input.THNN.MultiLabelMarginCriterion_updateGradInput(
-      input:cdata(),
-      target:cdata(),
-      self.gradInput:cdata(),
-      self.isTarget:cdata(),
+      input,
+      target,
+      self.gradInput,
+      self.isTarget,
       self.sizeAverage
    )
    return self.gradInput

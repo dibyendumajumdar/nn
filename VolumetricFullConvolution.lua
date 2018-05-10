@@ -106,12 +106,12 @@ function VolumetricFullConvolution:updateOutput(input)
   end
 
    inputTensor.THNN.VolumetricFullConvolution_updateOutput(
-      inputTensor:cdata(),
-      self.output:cdata(),
-      self.weight:cdata(),
+      inputTensor,
+      self.output,
+      self.weight,
       THNN.optionalTensor(self.bias),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      self.finput,
+      self.fgradInput,
       self.dT, self.dW, self.dH,
       self.padT, self.padW, self.padH,
       adjT, adjW, adjH
@@ -145,12 +145,12 @@ function VolumetricFullConvolution:updateGradInput(input, gradOutput)
     end
 
    inputTensor.THNN.VolumetricFullConvolution_updateGradInput(
-      inputTensor:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.weight:cdata(),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      inputTensor,
+      gradOutput,
+      self.gradInput,
+      self.weight,
+      self.finput,
+      self.fgradInput,
       self.dT, self.dW, self.dH,
       self.padT, self.padW, self.padH,
       adjT, adjW, adjH
@@ -190,12 +190,12 @@ function VolumetricFullConvolution:accGradParameters(input, gradOutput, scale)
   end
 
    inputTensor.THNN.VolumetricFullConvolution_accGradParameters(
-      inputTensor:cdata(),
-      gradOutput:cdata(),
-      self.gradWeight:cdata(),
+      inputTensor,
+      gradOutput,
+      self.gradWeight,
       THNN.optionalTensor(self.gradBias),
-      self.finput:cdata(),
-      self.fgradInput:cdata(),
+      self.finput,
+      self.fgradInput,
       self.dT, self.dW, self.dH,
       self.padT, self.padW, self.padH,
       adjT, adjW, adjH,

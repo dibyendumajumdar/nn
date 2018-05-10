@@ -17,9 +17,9 @@ function SpatialCrossMapLRN:updateOutput(input)
 
   if torch.typename(input):find('torch%.Cuda.*Tensor') then
      input.THNN.SpatialCrossMapLRN_updateOutput(
-        input:cdata(),
-        self.output:cdata(),
-        self.scale:cdata(),
+        input,
+        self.output,
+        self.scale,
         self.size,
         self.alpha,
         self.beta,
@@ -89,11 +89,11 @@ function SpatialCrossMapLRN:updateGradInput(input, gradOutput)
 
   if torch.typename(input):find('torch%.Cuda.*Tensor') then
      input.THNN.SpatialCrossMapLRN_updateGradInput(
-        input:cdata(),
-        gradOutput:cdata(),
-        self.gradInput:cdata(),
-        self.scale:cdata(),
-        self.output:cdata(),
+        input,
+        gradOutput,
+        self.gradInput,
+        self.scale,
+        self.output,
         self.size,
         self.alpha,
         self.beta,

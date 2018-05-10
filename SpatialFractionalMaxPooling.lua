@@ -124,10 +124,10 @@ function SpatialFractionalMaxPooling:updateOutput(input)
    local outW, outH = self:getOutputSizes_(input)
 
    input.THNN.SpatialFractionalMaxPooling_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       outW, outH, self.poolSizeW, self.poolSizeH,
-      self.indices:cdata(), self.randomSamples:cdata())
+      self.indices, self.randomSamples)
    return self.output
 end
 
@@ -138,11 +138,11 @@ function SpatialFractionalMaxPooling:updateGradInput(input, gradOutput)
    local outW, outH = self:getOutputSizes_(input)
 
    input.THNN.SpatialFractionalMaxPooling_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
       outW, outH, self.poolSizeW, self.poolSizeH,
-      self.indices:cdata())
+      self.indices)
    return self.gradInput
 end
 

@@ -41,10 +41,10 @@ end
 
 function SpatialSubSampling:updateOutput(input)
    input.THNN.SpatialSubSampling_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
-      self.weight:cdata(),
-      self.bias:cdata(),
+      input,
+      self.output,
+      self.weight,
+      self.bias,
       self.kW, self.kH,
       self.dW, self.dH
    )
@@ -54,10 +54,10 @@ end
 function SpatialSubSampling:updateGradInput(input, gradOutput)
    if self.gradInput then
       input.THNN.SpatialSubSampling_updateGradInput(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradInput:cdata(),
-         self.weight:cdata(),
+         input,
+         gradOutput,
+         self.gradInput,
+         self.weight,
          self.kW, self.kH,
          self.dW, self.dH
       )
@@ -68,10 +68,10 @@ end
 function SpatialSubSampling:accGradParameters(input, gradOutput, scale)
    scale = scale or 1
    input.THNN.SpatialSubSampling_accGradParameters(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradWeight:cdata(),
-      self.gradBias:cdata(),
+      input,
+      gradOutput,
+      self.gradWeight,
+      self.gradBias,
       self.kW, self.kH,
       self.dW, self.dH,
       scale

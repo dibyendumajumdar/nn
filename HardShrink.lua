@@ -7,8 +7,8 @@ end
 
 function HardShrink:updateOutput(input)
    input.THNN.HardShrink_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.lambda
    )
    return self.output
@@ -16,9 +16,9 @@ end
 
 function HardShrink:updateGradInput(input, gradOutput)
    input.THNN.HardShrink_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
       self.lambda
    )
    return self.gradInput

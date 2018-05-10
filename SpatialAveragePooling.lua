@@ -46,8 +46,8 @@ end
 function SpatialAveragePooling:updateOutput(input)
    backwardCompatible(self)
    input.THNN.SpatialAveragePooling_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.kW, self.kH,
       self.dW, self.dH,
       self.padW, self.padH,
@@ -65,9 +65,9 @@ end
 function SpatialAveragePooling:updateGradInput(input, gradOutput)
    if self.gradInput then
       input.THNN.SpatialAveragePooling_updateGradInput(
-         input:cdata(),
-         gradOutput:cdata(),
-         self.gradInput:cdata(),
+         input,
+         gradOutput,
+         self.gradInput,
          self.kW, self.kH,
          self.dW, self.dH,
          self.padW, self.padH,

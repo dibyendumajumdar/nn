@@ -133,10 +133,10 @@ function VolumetricFractionalMaxPooling:updateOutput(input)
    local outT, outW, outH = self:getOutputSizes_(input)
 
    input.THNN.VolumetricFractionalMaxPooling_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       outT, outW, outH, self.poolSizeT, self.poolSizeW, self.poolSizeH,
-      self.indices:cdata(), self.randomSamples:cdata())
+      self.indices, self.randomSamples)
    return self.output
 end
 
@@ -147,11 +147,11 @@ function VolumetricFractionalMaxPooling:updateGradInput(input, gradOutput)
    local outT, outW, outH = self:getOutputSizes_(input)
 
    input.THNN.VolumetricFractionalMaxPooling_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
       outT, outW, outH, self.poolSizeT, self.poolSizeW, self.poolSizeH,
-      self.indices:cdata())
+      self.indices)
    return self.gradInput
 end
 

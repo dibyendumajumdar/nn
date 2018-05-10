@@ -18,8 +18,8 @@ function ELU:updateOutput(input)
    local inplace = self.inplace or false
 
    input.THNN.ELU_updateOutput(
-      input:cdata(),
-      self.output:cdata(),
+      input,
+      self.output,
       self.alpha,
       inplace
    )
@@ -30,10 +30,10 @@ function ELU:updateGradInput(input, gradOutput)
    local inplace = self.inplace or false
 
    input.THNN.ELU_updateGradInput(
-      input:cdata(),
-      gradOutput:cdata(),
-      self.gradInput:cdata(),
-      self.output:cdata(),
+      input,
+      gradOutput,
+      self.gradInput,
+      self.output,
       self.alpha,
       inplace
    )

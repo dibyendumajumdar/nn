@@ -31,9 +31,9 @@ function BCECriterion:updateOutput(input, target)
    end
 
    input.THNN.BCECriterion_updateOutput(
-      input:cdata(),
-      target:cdata(),
-      self.output_tensor:cdata(),
+      input,
+      target,
+      self.output_tensor,
       self.sizeAverage,
       THNN.optionalTensor(weights)
    )
@@ -53,9 +53,9 @@ function BCECriterion:updateGradInput(input, target)
    end
 
    input.THNN.BCECriterion_updateGradInput(
-      input:cdata(),
-      target:cdata(),
-      self.gradInput:cdata(),
+      input,
+      target,
+      self.gradInput,
       self.sizeAverage,
       THNN.optionalTensor(weights)
    )
