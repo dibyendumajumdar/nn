@@ -472,6 +472,193 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
             {name='boolean'},
             {name='int'},
             {name=accreal}})
+
+      wrap("LookupTable_renorm",
+           cname("LookupTable_renorm"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name='IndexTensor'},
+            {name=Tensor},
+            {name=accreal},
+            {name=accreal}})
+
+      wrap("MarginCriterion_updateOutput",
+           cname("MarginCriterion_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='boolean'},
+            {name=accreal}})
+      wrap("MarginCriterion_updateGradInput",
+           cname("MarginCriterion_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='boolean'},
+            {name=accreal}})
+
+      wrap("SoftMarginCriterion_updateOutput",
+           cname("SoftMarginCriterion_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='boolean'}})
+      wrap("SoftMarginCriterion_updateGradInput",
+           cname("SoftMarginCriterion_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='boolean'}})
+
+      wrap("MSECriterion_updateOutput",
+           cname("MSECriterion_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='boolean'}})
+      wrap("MSECriterion_updateGradInput",
+           cname("MSECriterion_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='boolean'}})
+
+      wrap("MultiLabelMarginCriterion_updateOutput",
+           cname("MultiLabelMarginCriterion_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name='IndexTensor'},
+            {name=Tensor},
+            {name=Tensor},
+            {name='boolean'}})
+      wrap("MultiLabelMarginCriterion_updateGradInput",
+           cname("MultiLabelMarginCriterion_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name='IndexTensor'},
+            {name=Tensor},
+            {name=Tensor},
+            {name='boolean'}})
+
+      wrap("MultiMarginCriterion_updateOutput",
+           cname("MultiMarginCriterion_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name='IndexTensor'},
+            {name=Tensor},
+            {name='boolean'},
+            {name='int'},
+            {name=Tensor},
+            {name=accreal}})
+      wrap("MultiMarginCriterion_updateGradInput",
+           cname("MultiMarginCriterion_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name='IndexTensor'},
+            {name=Tensor},
+            {name='boolean'},
+            {name='int'},
+            {name=Tensor},
+            {name=accreal}})
+
+      wrap("PReLU_updateOutput",
+           cname("PReLU_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='index'}})
+      wrap("PReLU_updateGradInput",
+           cname("PReLU_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='index'}})
+      wrap("PReLU_accGradParameters",
+           cname("PReLU_accGradParameters"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name='index'},
+            {name=accreal}})
+
+      wrap("Linear_updateOutput",
+           cname("Linear_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor}})
+      wrap("Linear_updateGradInput",
+           cname("Linear_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor}})
+      wrap("Linear_accGradParameters",
+           cname("Linear_accGradParameters"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=accreal}})
+
+      wrap("RReLU_updateOutput",
+           cname("RReLU_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=accreal},
+            {name=accreal},
+            {name='boolean'},
+            {name='boolean'},
+            {name='Generator'}})
+      wrap("RReLU_updateGradInput",
+           cname("RReLU_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=accreal},
+            {name=accreal},
+            {name='boolean'},
+            {name='boolean'}})
+
+      wrap("Sigmoid_updateOutput",
+           cname("Sigmoid_updateOutput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor}})
+      wrap("Sigmoid_updateGradInput",
+           cname("Sigmoid_updateGradInput"),
+           {{name=THNNState, invisible=true, default='NULL'},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor},
+            {name=Tensor}})
+
+
    end
    interface:register(string.format("torch_%sTHNN__", Tensor))
 
