@@ -1,4 +1,4 @@
-
+require 'THNNx'
 
 local THNN = {}
 

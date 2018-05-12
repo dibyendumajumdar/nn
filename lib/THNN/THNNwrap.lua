@@ -5,6 +5,91 @@ local argtypes = wrap.CInterface.argtypes
 
 argtypes['ptrdiff_t'] = wrap.types.ptrdiff_t
 
+for _,typename in ipairs({"FloatTensor", "DoubleTensor"}) do
+
+   argtypes[typename].check = function(arg, idx)
+                 if arg.dim then
+                    return string.format('(arg%d = luaT_toudata(L, %d, "torch.%s")) && (arg%d->nDimension == %d)', arg.i, idx, typename, arg.i, arg.dim)
+                 else
+                    return string.format('((arg%d = luaT_toudata(L, %d, "torch.%s")), (lua_isnil(L, %d) ? 1 : arg%d != NULL))', arg.i, idx, typename, idx, arg.i)
+                 end
+              end
+end
+
+local function interpretdefaultvalue(arg)
+   local default = arg.default
+   if type(default) == 'boolean' then
+      if default then
+         return '1'
+      else
+         return '0'
+      end
+   elseif type(default) == 'number' then
+      return tostring(default)
+   elseif type(default) == 'string' then
+      return default
+   elseif type(default) == 'function' then
+      default = default(arg)
+      assert(type(default) == 'string', 'a default function must return a string')
+      return default
+   elseif type(default) == 'nil' then
+      return nil
+   else
+      error('unknown default type value')
+   end   
+end
+
+argtypes.index = {
+
+   helpname = function(arg)
+               return "index"
+            end,
+
+   declare = function(arg)
+                -- if it is a number we initialize here
+                local default = math.tointeger(interpretdefaultvalue(arg)) or 1
+                return string.format("int64_t arg%d = %d;", arg.i, math.tointeger(default)-1)
+           end,
+
+   check = function(arg, idx)
+              return string.format("lua_isinteger(L, %d)", idx)
+           end,
+
+   read = function(arg, idx)
+             return string.format("arg%d = (int64_t)lua_tointeger(L, %d)-1;", arg.i, idx)
+          end,
+
+   init = function(arg)
+             -- otherwise do it here
+             if arg.default then
+                local default = interpretdefaultvalue(arg)
+                if not tonumber(default) then
+                   return string.format("arg%d = %s-1;", arg.i, default)
+                end
+             end
+          end,
+
+   carg = function(arg)
+             return string.format('arg%d', arg.i)
+          end,
+
+   creturn = function(arg)
+                return string.format('arg%d', arg.i)
+             end,
+
+   precall = function(arg)
+                if arg.returned then
+                   return string.format('lua_pushinteger(L, (lua_Integer)arg%d+1);', arg.i)
+                end
+             end,
+
+   postcall = function(arg)
+                 if arg.creturned then
+                    return string.format('lua_pushinteger(L, (lua_Integer)arg%d+1);', arg.i)
+                 end
+              end
+}
+
 argtypes.THNNState = {
 
    helpname = function(arg)
@@ -251,7 +336,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            cname("ClassNLLCriterion_updateOutput"),
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name='boolean'},
             {name=Tensor},
@@ -261,7 +346,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            cname("ClassNLLCriterion_updateGradInput"),
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name='boolean'},
             {name=Tensor},
@@ -272,7 +357,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            cname("SpatialClassNLLCriterion_updateOutput"),
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name='boolean'},
             {name=Tensor},
@@ -281,7 +366,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            cname("SpatialClassNLLCriterion_updateGradInput"),
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name='boolean'},
             {name=Tensor},
@@ -463,12 +548,12 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
       wrap("LookupTable_accGradParameters",
            cname("LookupTable_accGradParameters"),
            {{name=THNNState, invisible=true, default='NULL'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name=Tensor},
             {name='IntTensor'},            
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name='boolean'},
             {name='int'},
             {name=accreal}})
@@ -476,7 +561,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
       wrap("LookupTable_renorm",
            cname("LookupTable_renorm"),
            {{name=THNNState, invisible=true, default='NULL'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name=accreal},
             {name=accreal}})
@@ -532,7 +617,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            cname("MultiLabelMarginCriterion_updateOutput"),
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name=Tensor},
             {name='boolean'}})
@@ -540,7 +625,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            cname("MultiLabelMarginCriterion_updateGradInput"),
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name=Tensor},
             {name='boolean'}})
@@ -549,7 +634,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            cname("MultiMarginCriterion_updateOutput"),
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name='boolean'},
             {name='int'},
@@ -559,7 +644,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            cname("MultiMarginCriterion_updateGradInput"),
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name='boolean'},
             {name='int'},
@@ -720,11 +805,11 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
       wrap("IndexLinear_updateOutput",
            cname("IndexLinear_updateOutput"),
            {{name=THNNState, invisible=true, default='NULL'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name='int64_t'},
             {name=Tensor},
-            {name='IndexTensor'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name=Tensor},
             {name=Tensor},
@@ -733,11 +818,11 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
       wrap("IndexLinear_accGradParameters",
            cname("IndexLinear_accGradParameters"),
            {{name=THNNState, invisible=true, default='NULL'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name='int64_t'},
             {name=Tensor},
-            {name='IndexTensor'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name=Tensor},
             {name=Tensor},
@@ -749,11 +834,11 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
       wrap("IndexLinear_accUpdateGradParameters",
            cname("IndexLinear_accUpdateGradParameters"),
            {{name=THNNState, invisible=true, default='NULL'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name='int64_t'},
             {name=Tensor},
-            {name='IndexTensor'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
+            {name='IndexTensor', noreadadd=true},
             {name=Tensor},
             {name=Tensor},
             {name=Tensor},
@@ -766,8 +851,8 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
             {name=Tensor},
             {name=Tensor},
             {name=Tensor},
-            {name='IndexTensor'},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
+            {name='IndexTensor', noreadadd=true},
             {name='int64_t'},
             {name=accreal},
             {name=accreal}})
@@ -931,7 +1016,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
            {{name=THNNState, invisible=true, default='NULL'},
             {name=Tensor},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name='int'},
             {name='int'}})
       wrap("TemporalMaxPooling_updateGradInput",
@@ -940,7 +1025,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
             {name=Tensor},
             {name=Tensor},
             {name=Tensor},
-            {name='IndexTensor'},
+            {name='IndexTensor', noreadadd=true},
             {name='int'},
             {name='int'}})
 
@@ -1200,7 +1285,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
         {{name=THNNState, invisible=true, default="NULL"},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},})
       wrap("SpatialAdaptiveMaxPooling_updateGradInput",
         cname("SpatialAdaptiveMaxPooling_updateGradInput"),
@@ -1208,7 +1293,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},})
+         {name="IndexTensor", noreadadd=true},})
       wrap("SpatialAdaptiveAveragePooling_updateOutput",
         cname("SpatialAdaptiveAveragePooling_updateOutput"),
         {{name=THNNState, invisible=true, default="NULL"},
@@ -1249,7 +1334,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name=Tensor},})
       wrap("SpatialFractionalMaxPooling_updateGradInput",
         cname("SpatialFractionalMaxPooling_updateGradInput"),
@@ -1259,7 +1344,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
-         {name="IndexTensor"},})
+         {name="IndexTensor", noreadadd=true},})
       wrap("SpatialFullConvolution_updateOutput",
         cname("SpatialFullConvolution_updateOutput"),
         {{name=THNNState, invisible=true, default="NULL"},
@@ -1420,7 +1505,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
         {{name=THNNState, invisible=true, default="NULL"},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
@@ -1431,7 +1516,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
@@ -1441,7 +1526,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
         {{name=THNNState, invisible=true, default="NULL"},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
@@ -1453,7 +1538,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
          {name="int"},   {name="int"},
@@ -1464,7 +1549,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
         {{name=THNNState, invisible=true, default="NULL"},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},})
       wrap("SpatialMaxUnpooling_updateGradInput",
         cname("SpatialMaxUnpooling_updateGradInput"),
@@ -1472,7 +1557,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},})
       wrap("SpatialSubSampling_updateOutput",
         cname("SpatialSubSampling_updateOutput"),
@@ -1659,7 +1744,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name=Tensor},})
       wrap("VolumetricFractionalMaxPooling_updateGradInput",
         cname("VolumetricFractionalMaxPooling_updateGradInput"),
@@ -1669,7 +1754,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
-         {name="IndexTensor"},})
+         {name="IndexTensor", noreadadd=true},})
       wrap("VolumetricFullConvolution_updateOutput",
         cname("VolumetricFullConvolution_updateOutput"),
         {{name=THNNState, invisible=true, default="NULL"},
@@ -1791,7 +1876,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
         {{name=THNNState, invisible=true, default="NULL"},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
@@ -1802,7 +1887,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
@@ -1812,7 +1897,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
         {{name=THNNState, invisible=true, default="NULL"},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
@@ -1824,7 +1909,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
@@ -1835,7 +1920,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
         {{name=THNNState, invisible=true, default="NULL"},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},})
@@ -1845,7 +1930,7 @@ for _,Tensor in ipairs({"FloatTensor", "DoubleTensor"}) do
          {name=Tensor},
          {name=Tensor},
          {name=Tensor},
-         {name="IndexTensor"},
+         {name="IndexTensor", noreadadd=true},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},
          {name="int"},   {name="int"},   {name="int"},})
