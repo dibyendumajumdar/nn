@@ -12,7 +12,7 @@ function RReLU:__init(l, u, ip)
 end
 
 function RReLU:updateOutput(input)
-   local gen = ffi.typeof('THGenerator**')(torch._gen)[0]
+   --local gen = ffi.typeof('THGenerator**')(torch._gen)[0]
    input.THNN.RReLU_updateOutput(
       input,
       self.output,
@@ -21,7 +21,7 @@ function RReLU:updateOutput(input)
       self.upper,
       self.train,
       self.inplace,
-      gen
+      torch._gen
    )
    return self.output
 end

@@ -313,7 +313,7 @@ TH_API void THNN_(MultiMarginCriterion_updateOutput)(
           THTensor *output,
           bool sizeAverage,
           int p,
-          THTensor* weights,      // [OPTIONAL]
+          THTensor *weights,      // [OPTIONAL]
           accreal margin);
 TH_API void THNN_(MultiMarginCriterion_updateGradInput)(
           THNNState *state,
@@ -483,7 +483,7 @@ TH_API void THNN_(IndexLinear_accGradParameters)(
           THTensor *gradBias,
           THTensor *weight,
           THTensor *bias,
-          THTensor* valuesBuffer,
+          THTensor *valuesBuffer,
           accreal weightDecay,
           accreal scale);
 TH_API void THNN_(IndexLinear_accUpdateGradParameters)(
@@ -1557,10 +1557,10 @@ TH_API void THNN_(FeatureLPPooling_updateOutput)(
 
 TH_API void THNN_(FeatureLPPooling_updateGradInput)(
           THNNState *state,
-          THTensor* gradOutput,
-          THTensor* input,
-          THTensor* output,
-          THTensor* gradInput,
+          THTensor *gradOutput,
+          THTensor *input,
+          THTensor *output,
+          THTensor *gradInput,
           accreal power,
           int width,
           int stride,
