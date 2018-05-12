@@ -1975,11 +1975,9 @@ end
 
 interface:print([[
 int luaopen_THNNx(lua_State *L) {
-  fprintf(stderr, "Initializing THNN\n");
   torch_FloatTensorTHNN_init(L);
   torch_DoubleTensorTHNN_init(L);
   lua_createtable(L, 0, 0);
-  fprintf(stdout, "THNN initialized successfully\n");
   return 1;
 }
 ]])
