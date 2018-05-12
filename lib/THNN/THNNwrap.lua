@@ -1,3 +1,14 @@
+-- Utility to generate Lua C api based
+-- interface for torch.nn
+-- Note that the wrap() calls were generated
+-- using the tools/extract.lua utility
+-- Some aspects of the interface needed changes
+-- a) optional args handling - we use nil as optional indicator
+-- b) IndexTensor args need noreadadd set to true to aoid adding -1
+-- c) Index_t is mapped to int64_t rather than index as latter does adjustment by 1 that
+--    breaks PReLU - need to check why Torch does this adjustment elsewhere but
+--    here it causes problems
+
 local wrap = require 'cwrap'
 
 local interface = wrap.CInterface.new()
