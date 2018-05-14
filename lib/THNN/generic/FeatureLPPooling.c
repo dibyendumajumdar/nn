@@ -220,7 +220,8 @@ THNN_(FeatureLPPooling_updateOutput)(
 
   FEATURE_LP_SIZE_TYPE batch, opt1, opt2, outputFeature, i;
 
-#pragma omp parallel for
+// FIXME enabling this causes crashes on Win64
+//#pragma omp parallel for
   for (batch = 0; batch < FEATURE_LP_CAST_TYPE inputDesc.size[0]; ++batch) {
     for (opt1 = 0; opt1 < FEATURE_LP_CAST_TYPE inputDesc.size[2]; ++opt1) {
       for (opt2 = 0; opt2 < FEATURE_LP_CAST_TYPE inputDesc.size[3]; ++opt2) {
@@ -316,7 +317,8 @@ THNN_(FeatureLPPooling_updateGradInput)(
 
   FEATURE_LP_SIZE_TYPE batch, opt1, opt2, outputFeature, i;
 
-#pragma omp parallel for
+// FIXME enabling this causes crashes on Win64
+//#pragma omp parallel for
   for (batch = 0; batch < FEATURE_LP_CAST_TYPE inputDesc.size[0]; ++batch) {
     for (opt1 = 0; opt1 < FEATURE_LP_CAST_TYPE inputDesc.size[2]; ++opt1) {
       for (opt2 = 0; opt2 < FEATURE_LP_CAST_TYPE inputDesc.size[3]; ++opt2) {
