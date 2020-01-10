@@ -1,4 +1,3 @@
-local ffi  = require 'ffi'
 local IndexLinear, parent = torch.class('nn.IndexLinear', 'nn.Module')
 
 

@@ -1,4 +1,3 @@
-local ffi = require 'ffi'
 local RReLU, parent = torch.class('nn.RReLU', 'nn.Module')
 
 function RReLU:__init(l, u, ip)
