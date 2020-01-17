@@ -15,7 +15,7 @@ IF(NOT THNN_INSTALL_LIB_SUBDIR)
   SET(THNN_INSTALL_INCLUDE_SUBDIR "include" CACHE PATH "THNN install include subdirectory")
 ENDIF()
 
-find_package(Lua REQUIRED)
+include(${CMAKE_INSTALL_PREFIX}/cmake/lua-config.cmake)
 
 message(STATUS "LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
 message(STATUS "LUA_LIBRARIES  : ${LUA_LIBRARIES}")
